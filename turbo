@@ -1,0 +1,15 @@
+#!/bin/bash
+
+DEVICE="/dev/input/event2"  # replace with your keyboard device
+
+sudo evtest "$DEVICE" | while read -r line; do
+  if echo "$line" | grep -q "KEY_PROG2.*value 1"; then
+    echo "TurboKey pressed!"
+    if [[ $(cat /sys/class/hwmon/hwmon3/fan1_input) -lt 2500 ]]; then
+	    fan -s 100
+    else
+	    fan -s 15
+    fi
+  fi
+done
+
