@@ -1,0 +1,25 @@
+#!/bin/bash
+
+RULE_FILE="/etc/udev/rules.d/00-aw-elc.rules"
+RULE='SUBSYSTEM=="usb", ATTRS{idVendor}=="187c", ATTRS{idProduct}=="0550", MODE="0660", TAG+="uaccess", SYMLINK+="awelc"'
+
+# Check for root privileges
+if [[ $EUID -ne 0 ]]; then
+    echo "❌ Please run this script as root (e.g., with sudo)"
+    exit 1
+fi
+
+# Write the rule
+echo "Creating udev rule in $RULE_FILE..."
+echo "$RULE" > "$RULE_FILE"
+
+# Reload udev rules
+echo "Reloading udev rules..."
+udevadm control --reload-rules
+udevadm trigger
+
+chmod +x ./fan
+chmod +x ./turbo
+
+echo -e "\n\n"
+./fan -h
