@@ -40,9 +40,11 @@ Always run as **root** (or with `sudo`), as the script interacts with kernel-lev
 ```bash
 cd Dell-G15-5530-fan-controller
 sudo ./setup
-sudo ./fan -h    # Show help
 ```
 
+```
+sudo fan -h    # Show help
+```
 ---
 
 ## Turbo Key (G-Key) Support
@@ -52,14 +54,20 @@ This binds your laptop's dedicated **G-Key** (usually called TurboKey) to contro
 Run it in the background:
 
 ```bash
-sudo nohup ./turbo &
+sudo nohup turbo &
 ```
 
 ---
 
+Let me know if you'd like to make this part of an automatic setup script (e.g., in your `setup` file).
+
 ## Notes
 
-* `./setup` configures a custom udev rule and permissions.
-* `./fan` lets you manually set fan speeds.
-* `./turbo` listens for your G-Key and toggles performance mode.
+* `setup` configures a custom udev rule and permissions.
+* `fan` lets you manually set fan speeds.
+* `turbo` listens for your G-Key and toggles performance mode.
 
+
+Here’s a clearer and more polished way to write that note in your `README.md`:
+
+---
