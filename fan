@@ -1,5 +1,11 @@
-
 #!/bin/bash
+#Must run as root!!!!
+if [[ $EUID -ne 0 ]]; then
+    echo "Error: This script must be run as root. Use sudo:"
+    echo -e "run:\nsudo $0 $@"
+    exit 1
+fi
+
 #Fan main control Script
 #Don't change below this
 fan1="0x32" 
@@ -14,7 +20,7 @@ fan_rpm="0x05"
 fan1_speed=10
 fan2_speed=10
 set_fan_boost(){
-	 if ! [[ "$2" =~ ^[0-9]+$ ]] || [ "$2" -lt 0 ] || [ "$2" -gt 100 ]; then
+	if ! [[ "$2" =~ ^[0-9]+$ ]] || [ "$2" -lt 0 ] || [ "$2" -gt 100 ]; then
 		echo "Error: Fan speed must be an integer between 0 and 100." >&2
 		exit 1
 	fi
@@ -30,15 +36,27 @@ get_fan_rpm(){
 	echo "$gets {$fan_rpm $1 0x00 0x00}"
 }
 run_cmd(){
-	 if [[ -z "$1" || "$1" =~ [^0-9a-fA-Fx{},[:space:]] ]]; then
+	if [[ -z "$1" || "$1" =~ [^0-9a-fA-Fx{},[:space:]] ]]; then
 		echo "Invalid ACPI command: '$1'" 
 		exit 1
 	fi
 	echo "\_SB.AMWW.WMAX 0 $1" > /proc/acpi/call
 }
-usage(){
-	echo "Help"
+usage() {
+    echo "Usage: fan [OPTIONS]"
+    echo
+    echo "Options:"
+    echo "  -s, --set <1-100>           Set both fans to the specified speed"
+    echo "  -s -cpu <1-100>             Set CPU fan only"
+    echo "  -s -gpu <1-100>             Set GPU fan only"
+    echo
+    echo "  -g, --get                   Get speed info for both fans"
+    echo "  -g -cpu                     Get CPU fan info"
+    echo "  -g -gpu                     Get GPU fan info"
+    echo
+    echo "  -h, --help                  Show this help message"
 }
+
 display_reading(){
 	run_cmd "$(get_fan_boost "$1")"
 	echo "Fan Speed: $(( $(tr -d '\000' < /proc/acpi/call) * 100 / 255 ))%"
@@ -47,7 +65,7 @@ display_reading(){
 }
 
 case "$1" in
-	-s)
+	-s|--set)
 		if [[ "$2" == "-cpu" && -n "$3" ]]; then
 			fan1_speed="$3"
 			run_cmd "$(set_fan_boost "$fan1" "$fan1_speed")"
@@ -67,7 +85,7 @@ case "$1" in
 			exit 1
 		fi
 		;;
-	-g)
+	-g|--get)
 		if [[ "$2" == "-cpu" ]]; then
 			echo "CPU:"
 			display_reading "$fan1"
@@ -82,12 +100,14 @@ case "$1" in
 			display_reading "$fan2"
 		fi
 		;;
+	-h|--help)
+		usage
+		exit 1
+		;;
+	*)
+		usage
+		exit 
+		;;
 esac
-echo "$set_speed"
+
 echo -e "\n\n"
-
-
-#help(){
-#}
-
-#
