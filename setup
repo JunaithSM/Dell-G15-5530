@@ -9,7 +9,7 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
-# Write the rule
+# Create the udev rule
 echo "Creating udev rule in $RULE_FILE..."
 echo "$RULE" > "$RULE_FILE"
 
@@ -18,9 +18,19 @@ echo "Reloading udev rules..."
 udevadm control --reload-rules
 udevadm trigger
 
-modprober acpi_call
-chmod +x ./fan
-chmod +x ./turbo
+# Load the kernel module
+echo "Loading acpi_call kernel module..."
+modprobe acpi_call
 
-echo -e "\n\n"
-./fan -h
+# Make scripts executable
+chmod +x ./fan ./turbo
+
+# Copy to system-wide bin directory
+echo "Installing binaries to /usr/bin..."
+cp ./fan /usr/bin/fan
+cp ./turbo /usr/bin/turbo
+
+echo -e "\n✅ Setup complete.\n"
+
+# Show usage
+fan -h
