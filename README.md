@@ -3,7 +3,7 @@ This is a fan controller for Dell G15 5530. Only for Dell G15 5530 laptop. Use a
 
 ###### Note: It worked in arch for me.
 ```
-git clone https://github.com/JunaithSM/Dell-G15-5530.git
+git clone https://github.com/JunaithSM/Dell-G15-5530-fan-controller.git
 ```
 
 ## Install
