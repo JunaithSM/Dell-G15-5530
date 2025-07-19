@@ -19,6 +19,7 @@ Allways run with `sudo`.
 
 ```
 cd Dell-G15-5530
+sudo ./setup 
 sudo ./fan -h
 ```
 
