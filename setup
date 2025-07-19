@@ -18,6 +18,7 @@ echo "Reloading udev rules..."
 udevadm control --reload-rules
 udevadm trigger
 
+modprober acpi_call
 chmod +x ./fan
 chmod +x ./turbo
 
