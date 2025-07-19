@@ -15,7 +15,7 @@ gets="0x14"
 set_boost="0x02"
 get_boost="0x0c"
 fan_rpm="0x05"
-
+#-------------------
 
 fan1_speed=10
 fan2_speed=10
