@@ -59,7 +59,7 @@ sudo nohup turbo &
 
 ---
 
-Let me know if you'd like to make this part of an automatic setup script (e.g., in your `setup` file).
+
 
 ## Notes
 
